@@ -2,31 +2,42 @@
 
 insert into conteudo (titulo, tipo, duracao_segundos, classificacao, data_lancamento, popularidade_geral) values
 -- Filmes
-('O Poderoso Chefão', 'filme', 10500, '16+', '1972-03-24', 9.2),  -- 2h55min
-('Parasita', 'filme', 7920, '16+', '2019-05-30', 8.6),  -- 2h12min
-('Cidade de Deus', 'filme', 7800, '18+', '2002-08-30', 8.6),  -- 2h10min
-('Toy Story', 'filme', 4860, 'L', '1995-11-22', 8.3),  -- 1h21min
-('O Labirinto do Fauno', 'filme', 7140, '16+', '2006-10-20', 8.2),  -- 1h59min
+('O Poderoso Chefão', 'filme', 10500, '16+', '1972-03-24', 9.2),
+('Parasita', 'filme', 7920, '16+', '2019-05-30', 8.6), 
+('Cidade de Deus', 'filme', 7800, '18+', '2002-08-30', 8.6), 
+('Toy Story', 'filme', 4860, 'L', '1995-11-22', 8.3), 
+('O Labirinto do Fauno', 'filme', 7140, '16+', '2006-10-20', 8.2),
 
 -- Séries
-('Stranger Things', 'série', 3600, '16+', '2016-07-15', 8.7),  -- 1h por episódio
-('La Casa de Papel', 'série', 3300, '18+', '2017-05-02', 8.2),  -- 55min por episódio
-('The Crown', 'série', 3600, '14+', '2016-11-04', 8.6),  -- 1h por episódio
-('Round 6', 'série', 4500, '18+', '2021-09-17', 8.0),  -- 1h15min por episódio
-('Dark', 'série', 4500, '16+', '2017-12-01', 8.8),  -- 1h15min por episódio
+('Stranger Things', 'série', 3600, '16+', '2016-07-15', 8.7),  
+('La Casa de Papel', 'série', 3300, '18+', '2017-05-02', 8.2),  
+('The Crown', 'série', 3600, '14+', '2016-11-04', 8.6),  
+('Round 6', 'série', 4500, '18+', '2021-09-17', 8.0),  
+('Dark', 'série', 4500, '16+', '2017-12-01', 8.8), 
 
 -- Documentários
-('Meu Amigo Totoro', 'documentário', 5160, 'L', '1988-04-16', 8.2),  -- 1h26min
-('13ª Emenda', 'documentário', 6000, '14+', '2016-09-30', 8.2),  -- 1h40min
-('Amy', 'documentário', 7680, '12+', '2015-05-16', 7.8),  -- 2h08min
-('O Dilema das Redes', 'documentário', 5640, '12+', '2020-09-09', 7.6),  -- 1h34min
+('Meu Amigo Totoro', 'documentário', 5160, 'L', '1988-04-16', 8.2), 
+('13ª Emenda', 'documentário', 6000, '14+', '2016-09-30', 8.2),  
+('Amy', 'documentário', 7680, '12+', '2015-05-16', 7.8),  
+('O Dilema das Redes', 'documentário', 5640, '12+', '2020-09-09', 7.6),  
 
 -- Standups
-('Rafael Portugal: Pode Rir', 'standup', 3420, '14+', '2021-11-25', 7.5),  -- 57min
-('Whindersson: Adulto?', 'standup', 4500, '14+', '2023-03-10', 7.8),  -- 1h15min
-('Afonso Padilha: A Vida é Bela', 'standup', 3900, '16+', '2022-06-15', 7.9),  -- 1h05min
-('Thiago Ventura: Pisa na Fulô', 'standup', 3600, '18+', '2023-08-20', 8.0),  -- 1h
-('Paulo Vieira: Hora do Rush', 'standup', 3300, '16+', '2022-12-05', 7.7);  -- 55min
+('Rafael Portugal: Pode Rir', 'standup', 3420, '14+', '2021-11-25', 7.5), 
+('Whindersson: Adulto?', 'standup', 4500, '14+', '2023-03-10', 7.8), 
+('Afonso Padilha: A Vida é Bela', 'standup', 3900, '16+', '2022-06-15', 7.9), 
+('Thiago Ventura: Pisa na Fulô', 'standup', 3600, '18+', '2023-08-20', 8.0),  
+('Paulo Vieira: Hora do Rush', 'standup', 3300, '16+', '2022-12-05', 7.7);  
+
+insert into conteudo (titulo, tipo, duracao_segundos, classificacao, data_lancamento, popularidade_geral) values
+
+('Clube da Luta', 'filme', 8340, '18+', '1999-10-15', 8.8),
+('Interestelar', 'filme', 10140, '12+', '2014-10-26', 8.6),
+
+('Breaking Bad', 'série', 2880, '18+', '2008-01-20', 9.5),
+('Game of Thrones', 'série', 3300, '18+', '2011-04-17', 9.3),
+
+('The Last Dance', 'documentário', 3000, '12+', '2020-04-19', 9.1);
+
 
 -- USUÁRIOS 
 insert into usuario (email, plano, data_cadastro) values
@@ -114,19 +125,157 @@ insert into perfil (usuario_id, nome, idade, is_infantil) values
 
 
 
-insert into genero (nome, descricao) values
-('suspense psicológico', 'suspense focado em tensão mental'),
-('comédia romântica adolescente', 'comédias leves com romance juvenil'),
-('drama familiar emocionante', 'dramas focados em relações familiares'),
-('ficção científica distópica', 'futuros alternativos sombrios'),
-('documentário true crime', 'documentários sobre crimes reais'),
-('anime shonen', 'anime voltado para público jovem masculino'),
-('reality show culinário', 'competições de culinária'),
-('stand-up brasileiro', 'comédia stand-up de comediantes brasileiros'),
-('drama histórico', 'dramas baseados em eventos históricos'),
-('thriller de ação', 'filmes de ação com muita tensão'),
-('animação infantil', 'animação para crianças'),
-('documentário político', 'documentários sobre política'),
-('série de fantasia', 'séries com elementos fantásticos'),
-('comédia dramática', 'mistura de comédia e drama'),
-('terror sobrenatural', 'filmes de terror com elementos sobrenaturais');
+-- Inserir gêneros (microgêneros estilo Netflix)
+insert into genero (nome) values
+('Drama Criminal'),
+('Drama Familiar'),
+('Drama Histórico'),
+('Drama Policial'),
+('Drama de Crime Verdadeiro'),
+
+('Comédia Romântica'),
+('Comédia Stand-up'),
+('Comédia Dramática'),
+('Comédia de Situação'),
+('Comédia Negra'),
+
+('Suspense Psicológico'),
+('Thriller de Ação'),
+('Thriller Policial'),
+('Suspense Investigativo'),
+('Ação e Aventura'),
+
+('Ficção Científica'),
+('Fantasia Sombria'),
+('Distopia'),
+('Ficção Científica Adolescente'),
+('Fantasia Épica'),
+
+('Terror Psicológico'),
+('Terror Sobrenatural'),
+('Slasher'),
+('Terror de Monstros'),
+
+('Documentário Social'),
+('Documentário True Crime'),
+('Documentário Biográfico'),
+('Documentário Político'),
+('Documentário Histórico'),
+
+('Animação Infantil'),
+('Animação para Adultos'),
+('Anime'),
+('Animação Stop Motion'),
+
+('Cinema Coreano'),
+('Cinema Brasileiro'),
+('Cinema Espanhol'),
+('Séries Europeias'),
+
+('Romance'),
+('Musical'),
+('Esportes'),
+('Reality Show'),
+('Competição');
+
+
+insert into conteudo_genero (conteudo_id, genero_id) values
+
+(1, 1),
+(1, 3),
+
+(2, 1),
+(2, 8),
+(2, 9),
+(2, 25),
+
+(3, 1),
+(3, 4),
+(3, 26),
+(3, 5),
+
+(4, 21),
+(4, 15),
+
+(5, 16),
+(5, 3),
+(5, 27),
+
+(6, 13),
+(6, 11),
+(6, 16),
+(6, 3),
+
+(7, 4),
+(7, 12),
+(7, 1),
+(7, 27),
+
+(8, 3),
+(8, 24),
+
+(9, 14),
+(9, 12),
+(9, 9),
+(9, 25),
+
+
+(10, 13),
+(10, 11),
+(10, 3),
+(10, 28),
+
+(11, 21),
+(11, 16),
+(11, 23),
+
+(12, 20),
+(12, 22),
+(12, 24),
+
+(13, 21),
+
+
+(14, 20),
+(14, 13),
+(14, 22),
+
+
+(15, 7),
+(15, 26),
+
+(16, 7),
+(16, 26),
+
+(17, 7),
+(17, 26),
+
+(18, 7),
+(18, 26),
+(18, 20),
+
+(19, 7),
+(19, 26);
+
+insert into conteudo_genero (conteudo_id, genero_id) values
+
+(20, 1),  
+(20, 8),  
+(20, 11), 
+
+(21, 13), 
+(21, 3),
+(21, 31),
+
+(22, 1), 
+(22, 8), 
+(22, 4),  
+
+(23, 16), 
+(23, 3), 
+(23, 19), 
+
+
+(24, 21), 
+(24, 32), 
+(24, 24);

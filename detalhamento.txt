@@ -1,0 +1,456 @@
+leia em tela cheia pra nao ficar tao confuso
+as explicações de diferentes informacoes da tabela estao sepaados por ;
+
+arquivo 1_base:
+
+criação do tipo de dados: 
+
+tipo_midia pode ser: 'filme', 'série', 'documentário', 'standup'
+classificacao_indicativa pode ser: 'L', '10+', '12+', '14+', '16+', '18+'
+nivel_plano pode ser:'básico', 'padrao', 'premium'
+tipo_acao pode ser: 'iniciar', 'pausar', 'continuar', 'parar', 'concluir'
+
+/////
+
+Criação de tabelas:
+
+criação da tabela conteudo:
+coluna de nome id; tipo de dado: numero em serie (serial); chave primaria da tabela (identificação da tabela)
+coluna de nome titulo; tipo de dado: caracteres, limitado a 255 caracteres, nao pode ser nulo
+coluna de nome tipo; tipo de dado: tipo_midia, nao pode ser nulo
+coluna de nome duracao_segundos; tipo de dado: numero inteiro
+coluna de nome classificacao; tipo de dado: classificacao_indicativa, nao pode ser nulo
+coluna de nome data_lancamento; tipo de dado: data
+coluna d nome popularidade_geral; tipo de dado: decimal, 3 numeros no total, 2 numeros depois da virgula ;por padrão 0.00
+
+
+criação da tabela genero:
+coluna de nome id; tipo de dado: numero em serie (serial); chave primaria da tabela (identificação da tabela)
+coluna de nome nome; tipo de dado: caracteres, limitado a 50 caracteres, dado que nao repete, nao pode ser nulo
+
+
+criação da tabela conteudo_genero:
+coluna de nome conteudo_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: conteudo, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+coluna de nome genero_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: conteudo, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+chave primaria composta: conteudo_id, genero_id, usa duas informações para criar uma identificação única pra cada dado da tabela
+
+
+criação da tabela usuario
+oluna de nome id; tipo de dado: numero em serie (serial); chave primaria da tabela (identificação da tabela)
+coluna de nome email; tipo de dado: caracteres, limitado a 255 caracteres, dado que nao repete, nao pode ser nulo 
+coluna de nome data_cadastro; tipo de dado: data e horário(timestamp); por padrão data e horario atuais no momento do regitro do dado 
+coluna de nome plano; tipo de dado: nivel_plano; não pode ser nulo 
+
+criação da tabela perfil:
+coluna de nome id; tipo de dado: numero em serie (serial); chave primaria da tabela (identificação da tabela)
+coluna de nome usuario_id; tipo de dado: _;uso de chave estrangeira, referencias a tabela usuario, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado 
+coluna de nome nome; tipo de dado: caracteres, limitado a 50 caracteres, nao pode ser nulo; 
+coluna de nome idade; tipo de dado: inteiro, nao pode ser nulo; 
+coluna de nome is_infantil; tipo de dado: verdadeiro ou falso; por padrão: falso
+coluna de nome idioma_preferido; tipo de dado: caracteres, limitado a 10 caracteres; por padrão "pt" 
+dados unicos: usuario_id e nome
+
+
+acao_usuario:
+coluna de nome id; tipo de dado: numero em serie (serial); chave primaria da tabela (identificação da tabela)
+coluna de nome perfil_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: perfil, coluna: id; não pode ser nulo; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+coluna de nome conteudo_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: conteudo, coluna: id; não pode ser nulo; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+coluna de nome acao; tipo de dado: tipo_acao; não pode ser nulo
+coluna de nome porcentagem; tipo de dado: decimal, 5 numeros no total, 2 numeros depois da virgula; restrição: valor entre 0 e 100
+coluna de nome data_hora; tipo de dado: data e horário (timestamp); por padrão data e horario atuais no momento do regitro do dado
+índice: idx_acao_usuario_perfil (perfil_id), o index cria uma estrutura de busca otimizada para encontrar rapidamente todas as ações relacionadas a um perfil específico
+índice: idx_acao_usuario_conteudo (conteudo_id), index cria uma estrutura de busca otimizada para encontrar rapidamente todas as ações relacionadas a um conteudo específico
+
+
+historico:
+coluna de nome id; tipo de dado: numero em serie (serial); chave primaria da tabela (identificação da tabela)
+coluna de nome perfil_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: perfil, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+coluna de nome conteudo_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: conteudo, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+coluna de nome data_hora_inicio; tipo de dado: data e horário (timestamp); não pode ser nulo; por padrão data e horario atuais no momento do regitro do dado
+coluna de nome data_hora_fim; tipo de dado: data e horário (timestamp)
+coluna de nome porcentagem_assistida; tipo de dado: decimal, 5 numeros no total, 2 numeros depois da virgula; restrição: valor entre 0 e 100
+coluna de nome avaliacao; tipo de dado: inteiro; restrição: valor entre 1 e 5
+dados unicos: perfil_id, conteudo_id, data_hora_inicio
+
+compatibilidade_perfis:
+coluna de nome perfil_a_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: perfil, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+coluna de nome perfil_b_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: perfil, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+coluna de nome score_compatibilidade; tipo de dado: decimal, 5 numeros no total, 4 numeros depois da virgula; por padrão 0.0000
+coluna de nome generos_comuns; tipo de dado: array(lista) de texto
+coluna de nome ultima_calculo; tipo de dado: data e horário (timestamp); por padrão data e horario atuais no momento do regitro do dado
+chave primaria composta: perfil_a_id, perfil_b_id, usa duas informações para criar uma identificação única pra cada dado da tabela
+restrição: perfil_a_id diferente de perfil_b_id
+
+preferencia_perfil:
+coluna de nome perfil_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: perfil, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+coluna de nome genero_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: genero, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+coluna de nome score; tipo de dado: decimal, 5 numeros no total, 4 numeros depois da virgula; por padrão 0.0000
+coluna de nome ultima_atualizacao; tipo de dado: data e horário (timestamp); por padrão data e horario atuais no momento do regitro do dado
+chave primaria composta: perfil_id, genero_id, usa duas informações para criar uma identificação única pra cada dado da tabela
+
+
+///////
+
+arquivo 2_automatizacao
+
+criação de função:
+
+/////
+
+criação da função: fc_formatar_duracao_com_segundos_filmes;
+Esta função recebe um número inteiro que representa duração em segundos e retorna uma string formatada no formato "HH:MM:SS";
+
+define as variaveis:
+    horas tipop: inteiro
+    minutos tipo: inteiro
+    segundos tipo: inteiro
+
+Lógica interna:
+floor(duracao_segundos / 3600): divide o total de segundos por 3600 (quantos segundos tem uma hora) e usa a função "floor" para pegar apenas a parte inteira, arredondando para baixo; 
+duracao_segundos % 60: pega o resto da divisão por 60, que são os segundos que não completam um minuto;
+lpad(horas::text, 2, '0'): converte o número de horas para texto e usa "lpad" para preencher com zeros à esquerda até ter 2 caracteres;
+concat: junta as horas, minutos e segundos formatados com ":" entre eles,adiciona zero à esquerda se necessário;
+
+////
+
+Criação da função: fc_assistir_conteudo;
+Esta função permite marcar um conteúdo como assistido por um perfil;
+
+Parâmetros: p_perfil_id (ID do perfil), p_conteudo_id (ID do conteúdo), p_porcentagem (porcentagem assistida, padrão 100%), p_avaliacao (nota dada, opcional);
+Funcionamento interno:
+
+define as variaveis v_historico_id tipo: inteiro
+
+Primeiro valida se o perfil pode acessar o conteúdo usando a função fc_validar_classificacao_perfil;
+Se não puder, lança uma exceção com mensagem de erro;
+Insere uma ação do tipo 'concluir' na tabela acao_usuario com a porcentagem informada;
+Se foi informada uma avaliação (nota), atualiza o registro de histórico correspondente com essa avaliação;
+Retorna o ID da ação criada;
+
+////
+
+Criação da função: fc_processar_acao_usuario;
+Esta função é executada automaticamente por um trigger quando uma nova ação é inserida na tabela acao_usuario;
+Parâmetro: NEW (representa a nova linha inserida na tabela);
+Funcionamento por tipo de ação:
+
+Ação 'iniciar':
+Verifica se já existe um histórico ativo (sem data de fim) para esse perfil e conteúdo;
+Se existir, atualiza a data de início;
+Se não existir, cria um novo registro no histórico com porcentagem 0%;
+
+Ação 'pausar':
+Busca o histórico ativo mais recente;
+Se encontrado e tiver porcentagem informada, atualiza a porcentagem assistida;
+
+Ação 'concluir':
+Busca o histórico ativo;
+Marca como concluído: data de fim = hora atual, porcentagem = 100%;
+Chama função para atualizar preferências do perfil;
+
+Ação 'parar':
+Busca o histórico ativo;
+Se não informou porcentagem, calcula automaticamente baseado no tempo assistido;
+Atualiza histórico com data de fim e porcentagem;
+Se assistiu mais de 50%, atualiza preferências do perfil;
+Mostra uma mensagem informando a porcentagem assistida e o ID do histórico;
+
+Criação do TRIGGER:
+Cria um gatilho chamado trg_processar_acao;
+Configuração: executa depois de inserir na tabela acao_usuario;
+Para cada linha (FOR EACH ROW);
+Executa a função fc_processar_acao_usuario;
+
+
+Criação da função: fc_atualizar_preferencias_perfil;
+Esta função recalcula as preferências de gênero de um perfil baseado no seu histórico de visualização;
+Funcionamento interno:
+
+Primeiro limpa todas as preferências antigas do perfil;
+Depois recalcula baseado no histórico:
+Considera apenas conteúdos com mais de 50% assistidos;
+Calcula score para cada gênero: (quantidade de vezes assistiu * avaliação média * fator de recência);
+Fórmula: (contagem de visualizações / total assistido) × (avaliação média / 5) × (1.2 se recente, 0.8 se antigo);
+Insere na tabela preferencia_perfil;
+
+
+Criação da função: trg_atualizar_preferencias_historico;
+Esta função é executada automaticamente quando o histórico é inserido ou atualizado;
+Funcionamento:
+Verifica se a porcentagem assistida é maior que 50%;
+Ou se mudou de ≤50% para >50%;
+Se sim, chama a função fc_atualizar_preferencias_perfil para recalcular preferências;
+
+
+Criação do TRIGGER:
+Cria um gatilho chamado trg_historico_atualiza_preferencias;
+Configuração: executa depois de inserção ou atualização em porcentagem_assistida na tabela historico
+Para cada linha (FOR EACH ROW);
+Executa a função trg_atualizar_preferencias_historico;
+
+
+Criação da função: trg_atualizar_compatibilidade;
+Esta função é executada automaticamente quando as preferências são inseridas ou atualizadas;
+Funcionamento:
+Chama a função fc_atualizar_preferencias_perfil para o perfil afetado;
+
+
+Criação do TRIGGER:
+Cria um gatilho chamado trg_preferencia_atualiza_compatibilidade;
+Configuração: xecuta depois de inserção ou atualização na tabela preferencia_perfil;
+Para cada linha (FOR EACH ROW);
+Executa a função trg_atualizar_compatibilidade;
+
+
+Criação da tabela de log: log_acao_usuario;
+coluna de nome id; tipo de dado: numero em serie (serial); chave primaria da tabela (identificação da tabela);
+coluna de nome acao_usuario_id; tipo de dado: inteiro; uso de chave estrangeira: referencia a tabela acao_usuario, coluna: id;
+coluna de nome perfil_id; tipo de dado: inteiro;
+coluna de nome conteudo_id; tipo de dado: inteiro;
+coluna de nome acao_antiga; tipo de dado: tipo_acao;
+coluna de nome acao_nova; tipo de dado: tipo_acao;
+coluna de nome porcentagem_antiga; tipo de dado: decimal, 5 numeros no total, 2 numeros depois da virgula;
+coluna de nome porcentagem_nova; tipo de dado: decimal, 5 numeros no total, 2 numeros depois da virgula;
+coluna de nome data_modificacao; tipo de dado: data e horário (timestamp); por padrão data e horario atuais no momento do regitro do dado;
+coluna de nome usuario_modificacao; tipo de dado: caracteres, limitado a 50 caracteres;
+
+
+Criação da função: trg_log_acao_usuario;
+Esta função é executada automaticamente quando ações do usuário são inseridas ou atualizadas;
+Funcionamento:
+Insere um registro na tabela log_acao_usuario com:
+Informações da ação (ID, perfil, conteúdo);
+Valores antigos e novos (ação e porcentagem);
+Data da modificação e usuário que fez;
+
+
+Criação do TRIGGER:
+Cria um gatilho chamado trg_log_modificacoes_acao;
+Configuração: executa depois de inserir ou atualizar na tabela acao_usuario;
+Para cada linha (FOR EACH ROW);
+Executa a função trg_log_acao_usuario;
+
+/////
+
+arquivo 3_validação_classificação
+
+Criação da função: fc_validar_classificacao_perfil;
+Parâmetros: p_perfil_id (ID do perfil), p_conteudo_id (ID do conteúdo)
+Funcionamento: 
+
+Criação da função: fc_validar_classificacao_perfil;
+Esta função verifica se um perfil tem idade suficiente para assistir um determinado conteúdo baseado na classificação indicativa;
+Recebe dois parâmetros: p_perfil_id (ID do perfil) e p_conteudo_id (ID do conteúdo);
+Retorna verdadeiro (true) se o perfil pode assistir, falso (false) se não pode;
+
+Funcionamento interno passo a passo:
+
+Busca dados do perfil:
+Faz uma consulta na tabela perfil para pegar a idade (idade) e se é perfil infantil (is_infantil);
+Usa SELECT ... INTO para armazenar esses valores nas variáveis v_idade_perfil e v_is_infantil;
+Se não encontrar o perfil (idade é nula), retorna falso;
+
+Busca classificação do conteúdo:
+Faz uma consulta na tabela conteudo para pegar a classificação indicativa do conteúdo;
+Usa conteudo.classificacao_indicativa%type para garantir que a variável v_classificacao tenha exatamente o mesmo tipo da coluna na tabela;
+Bloqueio especial para perfis infantis:
+
+Se o perfil é marcado como infantil (v_is_infantil = true):
+Só permite conteúdo classificado como "L" (Livre);
+Retorna verdadeiro apenas se a classificação for "L", falso para qualquer outra;
+
+Mapeamento de idade mínima:
+Usa a estrutura CASE(verificação de cada linha, quando possui o valor especificado em uma das linhas exeuta ação x) para converter a classificação em idade mínima:
+'L' = 0 anos
+'10+' = 10 anos
+'12+' = 12 anos
+'14+' = 14 anos
+'16+' = 16 anos
+'18+' = 18 anos
+Qualquer outra = 18 anos
+
+Comparação final:
+Retorna verdadeiro se a idade do perfil (v_idade_perfil) for maior ou igual à idade mínima requerida (v_min_idade);
+Retorna falso se a idade for menor;
+
+
+criação trigger:
+Cria um gatilho chamado trg_validar_classificacao;
+Configuração: executa depois de inserir na tabela historico;
+Para cada linha (FOR EACH ROW);
+Executa a função fc_bloquear_conteudo_inadequado;
+
+criação trigger:
+Cria um gatilho chamado trg_validar_classificacao_update;
+Configuração: executa depois de atualizar a tabela historico;
+Para cada linha (FOR EACH ROW)
+quando novo conteudo_id for diferente de antigo conteudo_id;
+Executa a função fc_bloquear_conteudo_inadequado;
+
+
+////
+
+arquivo 4_inserts 
+
+
+inserção de dados na tabela conteudo e nas colunas titulo, tipo, duracao_segundos, classificacao, data_lancamento, popularidade_geral
+
+inserção de dados na tabela usuarios e nas colunas email, plano, data_cadastro
+
+inserção de dados na tabela perfil e nas colunas usuario_id, nome, idade, is_infantil
+
+inserção de dados na tabela genero e nas colunas nome 
+
+inserção de dados na tabela conteudo_genero e nas colunas conteudo_id, genero_id
+--relacionando os dados do id da tabela conteudo e o id da tabela genero
+
+inserção de dados na tabela genero e nas colunas nome 
+
+////
+
+arquivo 5_consultas
+
+
+Criação de uma VIEW (tabela virtual usada para armazenar dados de maneira dinâmica, facilitando consultas);
+VIEW: vw_visualizacoes_ativas;
+Funcionamento da VIEW:
+Seleciona dados das tabelas perfil, historico e conteudo; relacionando elas com o comando JOIN;
+
+Transformações e renomeações:
+A coluna nome da tabela perfil é renomeada como perfil;
+A coluna titulo da tabela conteudo é renomeada como conteudo;
+Chama a função fc_formatar_duracao passando a duração em segundos, e o resultado é renomeado como duracao_total;
+Lista a porcentagem_assistida da tabela histórico concatenada com o símbolo "%", renomeada como progresso;
+Lista a data_hora_inicio da tabela histórico renomeada como inicio;
+
+Filtros aplicados:
+Mostra apenas visualizações que estão ativas OU recentemente finalizadas;
+Condição 1: visualizações que ainda não terminaram;
+Condição 2: visualizações que terminaram há menos de 1 hora E ainda não foram 100% completas;
+
+Ordenação:
+mostra as visualizações mais recentes primeiro;
+
+//
+
+Consulta 1: 
+Seleciona da tabela conteudo: titulo, tipo e duração formatada chamando a função fc_formatar_duracao_com_segundos_filmes com o parâmetro duracao_segundos;
+Filtra os resultados onde: duracao_segundos está entre entre 1 hora e 2 horas
+E tipo é igual a 'filme';
+
+
+Consulta 2:
+eleciona da tabela conteudo: titulo, tipo e duração formatada chamando a função fc_formatar_duracao_com_segundos_filmes com o parâmetro duracao_segundos;
+Filtra os resultados onde: genero é igual a 'Terror Sobrenatural' 
+E tipo é igual a 'filme';
+
+
+Consulta 3:
+Histórico de Visualização por Perfil 
+Seleciona dados combinando informações de perfil, conteúdo assistido e gêneros;
+Tabelas envolvidas: historico, perfil, conteudo, conteudo_genero, genero;
+
+Campos selecionados:
+perfil: nome do perfil (da tabela perfil)
+idade: idade do perfil (da tabela perfil)
+conteudo_assistido: título do conteúdo (da tabela conteudo)
+tipo: tipo de mídia (da tabela conteudo)
+classificacao: classificação indicativa (da tabela conteudo)
+generos: agrega todos os nomes de gênero separados por vírgula usando string_agg
+quando_assistiu: data/hora do início da visualização (da tabela historico)
+progresso: porcentagem assistida concatenada com "%"
+
+Filtros:
+Apenas conteúdos com mais de 50% assistidos
+Agrupa os resultados por todas as colunas selecionadas
+Ordena pelos mais recentes primeiro 
+Limita a 10 resultados
+
+
+/////
+
+
+arquivo 6_index
+
+Índice 1:
+Cria um índice chamado idx_conteudo_genero_conteudo_id na tabela conteudo_genero;
+Este índice é criado na coluna conteudo_id;
+Propósito: Acelerar buscas que filtram por conteúdo específico; Exemplo: "Quais gêneros tem o conteúdo X?";
+
+Índice 2: idx_conteudo_genero_genero_id
+Cria um índice chamado idx_conteudo_genero_genero_id na tabela conteudo_genero;
+Este índice é criado na coluna genero_id;
+Propósito: Acelerar buscas que filtram por gênero específico; Exemplo: "Quais conteúdos pertencem ao gênero Y?";
+
+Índice 3: idx_conteudo_genero_ambos
+Cria um índice chamado idx_conteudo_genero_ambos na tabela conteudo_genero;
+Este índice é composto (usa duas colunas): conteudo_id e genero_id;
+Propósito: Acelerar buscas que usam AMBAS as condições; Exemplo: "Verificar se o conteúdo X tem o gênero Y";
+
+Índice 4: idx_conteudo_genero_ambos_inverso
+Cria um índice chamado idx_conteudo_genero_ambos_inverso na tabela conteudo_genero;
+Este índice é composto na ordem inversa: genero_id e conteudo_id;
+Propósito: Otimizar consultas que filtram primeiro por gênero e depois por conteúdo;
+
+Índice 5: idx_conteudo_popularidade
+Cria um índice chamado idx_conteudo_popularidade na tabela conteudo;
+Este índice é criado na coluna popularidade_geral com ordem DESC (decrescente);
+Propósito: Acelerar buscas que ordenam por popularidade; Exemplo: "Mostre os conteúdos mais populares primeiro";
+
+///////////////
+
+Usuário 1: Administrador do Sistema
+Cria um usuário chamado admin_netflix com senha 'Admin@123';
+Permissões concedidas:
+Todos os privilégios no banco de dados (criar, excluir, modificar);
+Todas as operações (SELECT, INSERT, UPDATE, DELETE) em todas as tabelas;
+Controle total sobre todas as sequências (geração de IDs automáticos);
+Perfil: Acesso total para manutenção do sistema;
+
+Usuário 2: Aplicativo/Serviço
+Cria um usuário chamado app_netflix com senha 'App@456';
+Permissões concedidas:
+Permissão para conectar ao banco de dados;
+Permissão de LEITURA em todas as tabelas;
+Permissão para INSERIR e ATUALIZAR apenas nas tabelas historico e acao_usuario;
+Permissão para INSERIR na tabela preferencia_perfil (mas não UPDATE/DELETE);
+Permissão para USAR sequências (gerar IDs automáticos);
+Perfil: Aplicativo pode registrar visualizações e preferências, mas não pode modificar dados sensíveis;
+
+Usuário 3: Relatórios
+Cria um usuário chamado relatorios_netflix com senha 'Report@789';
+Permissões concedidas:
+ Permissão para conectar ao banco de dados;
+ Permissão de LEITURA em todas as tabelas;
+Permissão para VER o estado das sequências;
+Perfil: Apenas consultas para gerar relatórios, sem permissão para modificar dados;
+
+Usuário 4: Desenvolvedor
+Cria um usuário chamado dev_netflix com senha 'Dev@101112';
+Permissões concedidas:
+Permissão para conectar ao banco de dados;
+Todas as operações CRUD (Create, Read, Update, Delete) em todas as tabelas;
+Controle total sobre todas as sequências;
+Perfil: Desenvolvedor pode modificar dados para testes durante o desenvolvimento;
+
+Permissões Específicas para Views
+grant select on vw_visualizacoes_ativas to app_netflix, relatorios_netflix;
+Concede permissão de LEITURA na view vw_visualizacoes_ativas para os usuários app_netflix e relatorios_netflix;
+Importante: A permissão em views é separada das permissões nas tabelas base;
+
+/////////
+
+aquivo 8
+incompleto 
+
+-- grupo:
+-- coluna de nome id; tipo de dado: numero em serie (serial); chave primaria da tabela (identificação da tabela)
+-- coluna de nome nome; tipo de dado: caracteres, limitado a 100 caracteres, nao pode ser nulo
+-- coluna de nome usuario_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: usuario, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+-- coluna de nome descricao; tipo de dado: texto
+
+-- grupo_membro:
+-- coluna de nome grupo_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: grupo, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+-- coluna de nome perfil_id; tipo de dado: inteiro; uso de chave estrangeira: tem referencia ao dado de outra tabela, referencia a tabela: perfil, coluna: id; quando apaga o dado que é usado em outras tabelas toda tabela que faz menção áquele dado também tem esse dado apagado
+-- coluna de nome data_entrada; tipo de dado: data e horário (timestamp); por padrão data e horario atuais no momento do regitro do dado
+-- chave primaria composta: grupo_id, perfil_id, usa duas informações para criar uma identificação única pra cada dado da tabela

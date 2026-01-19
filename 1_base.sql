@@ -1,6 +1,8 @@
 create type tipo_midia as enum ('filme', 'série', 'documentário', 'standup');
-create type classificacao_indicativa as enum ('L', '10+', '12+', '14+', '16+', '18+'); -- Corrigido: 14+ em vez de 16+ duplicado
-create type nivel_plano as enum ('básico', 'padrao', 'premium'); 
+create type classificacao_indicativa as enum ('L', '10+', '12+', '14+', '16+', '18+'); 
+create type nivel_plano as enum ('básico', 'padrao', 'premium');
+create type tipo_acao as enum ('iniciar', 'pausar', 'continuar', 'parar', 'concluir');
+
 
 -- tabela principal de conteudo
 create table conteudo (
@@ -10,14 +12,13 @@ create table conteudo (
     duracao_segundos integer,
     classificacao classificacao_indicativa not null,
     data_lancamento date,
-    popularidade_geral decimal(3,2) default 0.00
+    popularidade_geral popularidade_geral(3,2) default 0.00
 );
 
 -- Genero conteudo
 create table genero (
     id serial primary key,
-    nome varchar(50) unique not null,
-    descricao text
+    nome varchar(50) unique not null
 );
 
 create table conteudo_genero (
@@ -38,14 +39,12 @@ create table perfil (
     id serial primary key,
     usuario_id integer not null references usuario(id) on delete cascade,
     nome varchar(50) not null,
-    avatar varchar(50),
     idade integer not null,
     is_infantil boolean default false,
     idioma_preferido varchar(10) default 'pt',
     unique(usuario_id, nome)
 );
 -- mapear ações do usuário 
-create type tipo_acao as enum ('iniciar', 'pausar', 'continuar', 'parar', 'concluir');
 
 create table acao_usuario (
     id serial primary key,
@@ -81,4 +80,13 @@ create table compatibilidade_perfis (
     ultima_calculo timestamp default current_timestamp,
     primary key (perfil_a_id, perfil_b_id),
     check (perfil_a_id <> perfil_b_id) 
+);
+
+
+create table preferencia_perfil (
+    perfil_id integer references perfil(id) on delete cascade,
+    genero_id integer references genero(id) on delete cascade,
+    score decimal(5,4) default 0.0000,
+    ultima_atualizacao timestamp default current_timestamp,
+    primary key (perfil_id, genero_id)
 );

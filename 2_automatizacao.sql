@@ -1,13 +1,21 @@
 -- FUNÇÃO FORMATAÇÃO MINUTOS
-create or replace function fc_formatar_duracao_com_segundos_filmes(duracao_segundos)
-returns VARCHAR(20) as $$
-BEGIN
-    RETURN concat(
-        floor(duracao_segundos / 3600), ':',
-        lpad(floor((duracao_segundos % 3600) / 60), 2, '0'), ':',
-        LPAD(duracao_segundos % 60, 2, '0'), ':'
+create or replace function fc_formatar_duracao_com_segundos_filmes(duracao_segundos integer)
+returns varchar(20) as $$
+declare 
+    horas int;
+    minutos int;
+    segundos int;
+begin
+    horas := floor(duracao_segundos / 3600);
+    minutos := floor((duracao_segundos % 3600) / 60);
+    segundos := duracao_segundos % 60;
+    
+    -- formatação
+    return concat(
+        lpad(horas::text, 2, '0'), ':',
+        lpad(minutos::text, 2, '0'), ':',
+        lpad(segundos::text, 2, '0')
     );
-    return new;
 end;
 $$ language plpgsql;
 select formatar_duracao_com_segundos_filmes(select duracao_segundos from filmes)
@@ -183,3 +191,106 @@ create trigger trg_processar_acao
 after insert on acao_usuario
 for each row
 execute function fc_processar_acao_usuario();
+
+
+--Atualizar preferências automaticamente
+create or replace function fc_atualizar_preferencias_perfil(p_perfil_id integer)
+returns void as $$
+begin
+    -- limpa preferências antigas
+    delete from preferencia_perfil where perfil_id = p_perfil_id;
+    
+    -- recalcula baseado no histórico
+    insert into preferencia_perfil (perfil_id, genero_id, score)
+    select 
+        h.perfil_id,
+        cg.genero_id,
+        (count(*) * 1.0 / total.total_assistidos) 
+        * coalesce(avg(h.avaliacao/5.0), 0.5)
+        * case 
+            when max(h.data_hora_fim) > current_timestamp - interval '30 days' 
+            then 1.2 else 0.8 
+          end as score_final
+    from historico h
+    join conteudo_genero cg on cg.conteudo_id = h.conteudo_id
+    cross join (
+        select count(*) as total_assistidos 
+        from historico 
+        where perfil_id = p_perfil_id 
+        and porcentagem_assistida > 50
+    ) as total
+    where h.perfil_id = p_perfil_id
+    and h.porcentagem_assistida > 50
+    group by h.perfil_id, cg.genero_id, total.total_assistidos;
+end;
+$$ language plpgsql;
+
+--Atualizar preferências quando histórico muda
+create or replace function trg_atualizar_preferencias_historico()
+returns trigger as $$
+begin
+    -- Quando um histórico é inserido/atualizado com mais de 50% assistido
+    if (new.porcentagem_assistida > 50.00) or 
+       (old.porcentagem_assistida <= 50.00 and new.porcentagem_assistida > 50.00) then
+        perform fc_atualizar_preferencias_perfil(new.perfil_id);
+    end if;
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger trg_historico_atualiza_preferencias
+after insert or update of porcentagem_assistida on historico
+for each row
+execute function trg_atualizar_preferencias_historico();
+
+-- TRIGGER: Atualizar compatibilidade automaticamente
+create or replace function trg_atualizar_compatibilidade()
+returns trigger as $$
+begin
+    -- Recalcula compatibilidade para o perfil
+    perform fc_atualizar_preferencias_perfil(new.perfil_id);
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger trg_preferencia_atualiza_compatibilidade
+after insert or update on preferencia_perfil
+for each row
+execute function trg_atualizar_compatibilidade();
+
+--histórico de mudanças
+create table log_acao_usuario (
+    id serial primary key,
+    acao_usuario_id integer references acao_usuario(id),
+    perfil_id integer,
+    conteudo_id integer,
+    acao_antiga tipo_acao,
+    acao_nova tipo_acao,
+    porcentagem_antiga decimal(5,2),
+    porcentagem_nova decimal(5,2),
+    data_modificacao timestamp default current_timestamp,
+    usuario_modificacao varchar(50)
+);
+
+create or replace function trg_log_acao_usuario()
+returns trigger as $$
+begin
+    insert into log_acao_usuario (
+        acao_usuario_id, perfil_id, conteudo_id,
+        acao_antiga, acao_nova,
+        porcentagem_antiga, porcentagem_nova,
+        usuario_modificacao
+    ) values (
+        new.id, new.perfil_id, new.conteudo_id,
+        old.acao, new.acao,
+        old.porcentagem, new.porcentagem,
+        current_user
+    );
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger trg_log_modificacoes_acao
+after insert or update on acao_usuario
+for each row
+execute function trg_log_acao_usuario();

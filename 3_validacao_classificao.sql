@@ -54,13 +54,13 @@ begin
         raise exception 'Conteúdo não encontrado.';
     end if;
     
-    -- verifca se o perfil existe
+    -- verifica se o perfil existe
     if not exists (select 1 from perfil where id = new.perfil_id) then
         raise exception 'Perfil não encontrado.';
     end if;
     
-    -- valida classificação indicativa
-    if not validar_classificacao_perfil(new.perfil_id, new.conteudo_id) then
+    -- valida classificação indicativa 
+    if not fc_validar_classificacao_perfil(new.perfil_id, new.conteudo_id) then
         raise exception 'Conteúdo não permitido para este perfil. Classificação inadequada.';
     end if;
 
@@ -72,13 +72,11 @@ $$ language plpgsql;
 create trigger trg_validar_classificacao
 before insert on historico
 for each row
-execute function bloquear_conteudo_inadequado();
+execute function fc_bloquear_conteudo_inadequado();
 
 -- TRIGGER UPDATE CLASSIFICAÇÃO
 create trigger trg_validar_classificacao_update
 before update on historico
 for each row
 when (new.conteudo_id <> old.conteudo_id)
-execute function bloquear_conteudo_inadequado();
-
-
+execute function fc_bloquear_conteudo_inadequado();
