@@ -81,28 +81,33 @@ group by p.id, p.nome, p.idade, p.is_infantil
 having count(h.id) > 0
 order by total_assistidos desc;
 
-select 
+SELECT 
     c.classificacao,
-    count(c.id) as qtd_conteudos,
-    round(avg(c.popularidade_geral), 2) as popularidade_media,
-    round(avg(c.duracao_segundos) / 60, 2) as duracao_media_minutos,
-    string_agg(distinct c.tipo, ', ') as tipos_presentes,
-    sum(case when c.tipo = 'filme' then 1 else 0 end) as filmes,
-    sum(case when c.tipo = 'série' then 1 else 0 end) as series,
-    sum(case when c.tipo = 'documentário' then 1 else 0 end) as documentarios
-from conteudo c
-group by c.classificacao
-having count(c.id) > 1
-order by 
-    case c.classificacao
-        when 'L' then 1
-        when '10+' then 2
-        when '12+' then 3
-        when '14+' then 4
-        when '16+' then 5
-        when '18+' then 6
-        else 7
-    end;
+    COUNT(c.id) as qtd_conteudos,
+    ROUND(AVG(c.popularidade_geral)::numeric, 2) as popularidade_media,
+    ROUND(AVG(c.duracao_segundos) / 60, 2) as duracao_media_minutos,
+
+    SUM(CASE WHEN c.tipo = 'filme' THEN 1 ELSE 0 END) as filmes,
+    SUM(CASE WHEN c.tipo = 'série' THEN 1 ELSE 0 END) as series,
+    SUM(CASE WHEN c.tipo = 'documentário' THEN 1 ELSE 0 END) as documentarios,
+    SUM(CASE WHEN c.tipo = 'standup' THEN 1 ELSE 0 END) as standups,
+
+    (SELECT STRING_AGG(DISTINCT tipo::text, ', ' ORDER BY tipo::text)
+     FROM conteudo c2 
+     WHERE c2.classificacao = c.classificacao) as tipos_presentes
+FROM conteudo c
+GROUP BY c.classificacao
+HAVING COUNT(c.id) > 1
+ORDER BY 
+    CASE c.classificacao
+        WHEN 'L' THEN 1
+        WHEN '10+' THEN 2
+        WHEN '12+' THEN 3
+        WHEN '14+' THEN 4
+        WHEN '16+' THEN 5
+        WHEN '18+' THEN 6
+        ELSE 7
+    END;
 
 select 
     titulo,
@@ -126,8 +131,5 @@ join genero g on g.id = cg.genero_id
 where g.nome ilike '%suspense%'
   and c.tipo = 'filme'
 group by c.id, c.titulo, c.tipo, c.classificacao, c.duracao_segundos;
-
-
-SELECT fc_criar_sessao_grupo(1, 1, 1);
 
 SELECT * FROM vw_sessoes_ativas;

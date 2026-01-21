@@ -194,5 +194,23 @@ INSERT INTO grupo (nome, usuario_id, descricao) VALUES
 ('Amigos Faculdade', 13, 'Grupo de amigos da faculdade');
 
 INSERT INTO grupo_membro (grupo_id, perfil_id) VALUES
-(1, 1), (1, 2), (1, 3),  -- Família Silva
+(1, 1), (1, 2), (1, 3), 
 (2, 23), (2, 24), (2, 25);
+
+insert into historico (perfil_id, conteudo_id, data_hora_inicio, data_hora_fim, porcentagem_assistida, avaliacao) values
+(1, 1, '2024-01-10 20:00:00', '2024-01-10 22:45:00', 100.00, 5),
+(1, 2, '2024-01-12 15:00:00', '2024-01-12 17:15:00', 100.00, 4),
+(2, 4, '2024-01-05 10:00:00', '2024-01-05 11:30:00', 100.00, 5),
+(3, 4, '2024-02-01 09:00:00', '2024-02-01 10:30:00', 100.00, 4),
+(19, 2, '2024-02-15 21:00:00', '2024-02-15 23:30:00', 100.00, 5),
+(20, 15, '2024-02-20 22:00:00', '2024-02-20 23:00:00', 100.00, 4);
+
+
+----ERROS PROPOSITAIS PARA DEMONSTRAÇÃO
+-- Pedro (15 anos) tenta assistir conteúdo 16+
+insert into historico (perfil_id, conteudo_id, data_hora_inicio, data_hora_fim, porcentagem_assistida, avaliacao) values
+(3, 1, '2024-03-01 20:00:00', '2024-03-01 22:45:00', 100.00, 5);
+
+-- Luiza (8 anos, infantil) tenta assistir conteúdo 10+
+insert into historico (perfil_id, conteudo_id, data_hora_inicio, data_hora_fim, porcentagem_assistida, avaliacao) values
+(4, 12, '2024-03-01 10:00:00', '2024-03-01 11:40:00', 100.00, 5);

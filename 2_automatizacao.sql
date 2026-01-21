@@ -25,6 +25,7 @@ create or replace function fc_assistir_conteudo(
 returns integer as $$
 declare
     v_historico_id integer;
+    v_ultimo_historico_id integer;
 begin
     -- validação
     if not fc_validar_classificacao_perfil(p_perfil_id, p_conteudo_id) then
@@ -35,20 +36,27 @@ begin
     values (p_perfil_id, p_conteudo_id, 'concluir', p_porcentagem)
     returning id into v_historico_id;
     
-    -- atualiza o histórico
+    -- atualiza o histórico SE houver avaliação
     if p_avaliacao is not null then
-        update historico 
-        set avaliacao = p_avaliacao
+        select id into v_ultimo_historico_id
+        from historico 
         where perfil_id = p_perfil_id 
           and conteudo_id = p_conteudo_id
           and porcentagem_assistida = p_porcentagem
         order by data_hora_inicio desc
         limit 1;
+        
+        if v_ultimo_historico_id is not null then
+            update historico 
+            set avaliacao = p_avaliacao
+            where id = v_ultimo_historico_id;
+        end if;
     end if;
     
     return v_historico_id;
 end;
 $$ language plpgsql;
+
 
 -- FUNÇÃO AÇAO USUÁRIO 
 create or replace function fc_processar_acao_usuario()
@@ -256,10 +264,46 @@ begin
 end;
 $$ language plpgsql;
 
+--atualizar compatibilidade
+create or replace function trg_atualizar_compatibilidade()
+returns trigger as $$
+begin
+    -- Recalcula compatibilidade apenas para o perfil afetado
+    perform fc_atualizar_preferencias_perfil(new.perfil_id);
+    
+    update compatibilidade_perfis cp
+    set 
+        score_compatibilidade = (
+            select round(avg(pp1.score * pp2.score), 4)
+            from preferencia_perfil pp1
+            join preferencia_perfil pp2 on pp1.genero_id = pp2.genero_id
+            where pp1.perfil_id = cp.perfil_a_id
+            and pp2.perfil_id = cp.perfil_b_id
+        ),
+        generos_comuns = (
+            select array_agg(g.nome)
+            from preferencia_perfil pp1
+            join preferencia_perfil pp2 on pp1.genero_id = pp2.genero_id
+            join genero g on g.id = pp1.genero_id
+            where pp1.perfil_id = cp.perfil_a_id
+            and pp2.perfil_id = cp.perfil_b_id
+            and pp1.score > 0.3
+            and pp2.score > 0.3
+        ),
+        ultima_calculo = current_timestamp
+    where cp.perfil_a_id = new.perfil_id 
+       or cp.perfil_b_id = new.perfil_id;
+    
+    return new;
+end;
+$$ language plpgsql;
+
+--trigger
 create trigger trg_preferencia_atualiza_compatibilidade
 after insert or update on preferencia_perfil
 for each row
 execute function trg_atualizar_compatibilidade();
+
 
 --histórico de mudanças
 create table log_acao_usuario (

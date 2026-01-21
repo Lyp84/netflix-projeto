@@ -250,8 +250,57 @@ create trigger trg_sincroniza_sessao_acao
 after insert or update on acao_usuario
 for each row
 execute function trg_sincronizar_sessao();
+----------------------
+
+INSERT INTO grupo (nome, usuario_id, descricao) VALUES
+('Família Silva Assistindo Juntos', 1, 'Grupo da família Silva para assistir filmes juntos'),
+('Amigos da Faculdade', 13, 'Grupo de amigos da faculdade para maratonar séries'),
+('Casal Ribeiro', 11, 'Grupo do casal para assistir juntos no fim de semana');
 
 
+INSERT INTO grupo_membro (grupo_id, perfil_id) VALUES
+(1, 1), 
+(1, 2),
+(1, 3); 
+
+INSERT INTO grupo_membro (grupo_id, perfil_id) VALUES
+(2, 23), 
+(2, 24),
+(2, 25); 
+
+INSERT INTO grupo_membro (grupo_id, perfil_id) VALUES
+(3, 19), 
+(3, 20);
+
+INSERT INTO acao_usuario (perfil_id, conteudo_id, acao, porcentagem) VALUES
+
+(1, 1, 'concluir', 100.00),  
+(2, 4, 'concluir', 100.00),  
+
+(23, 22, 'concluir', 100.00), 
+(24, 23, 'concluir', 100.00),
+(25, 20, 'concluir', 100.00), 
+
+
+(19, 2, 'concluir', 100.00),  
+(20, 5, 'concluir', 100.00);  
+
+SELECT fc_criar_sessao_grupo(1, 21, 1);
+
+
+SELECT fc_convidar_para_sessao(1, 1, 2);
+
+SELECT fc_convidar_para_sessao(1, 1, 3);
+
+SELECT fc_registrar_progresso_sessao(1, 1, 25.00);
+SELECT fc_registrar_progresso_sessao(1, 2, 30.00);
+SELECT fc_registrar_progresso_sessao(1, 3, 28.00);
+
+
+
+
+
+-----------------------
 create view vw_sessoes_ativas as
 select 
     sg.id as sessao_id,
@@ -275,19 +324,14 @@ group by sg.id, g.nome, c.titulo, c.duracao_segundos, c.classificacao,
          p_criador.nome, sg.data_hora_inicio
 order by sg.data_hora_inicio desc;
 
-select 
+
+SELECT 
     g.nome as grupo,
-    count(sg.id) as total_sessoes,
-    count(distinct sg.conteudo_id) as conteudos_diferentes,
-    round(avg(
-        extract(epoch from (sg.data_hora_fim - sg.data_hora_inicio)) / 60
-    ), 1) as duracao_media_minutos,
-    round(avg(sp.porcentagem_assistida), 2) as completude_media,
-    string_agg(distinct c.titulo, '; ') as conteudos_assistidos
-from grupo g
-left join sessao_grupo sg on sg.grupo_id = g.id
-left join sessao_participante sp on sp.sessao_id = sg.id
-left join conteudo c on c.id = sg.conteudo_id
-where sg.status = 'concluida'
-group by g.id, g.nome
-order by total_sessoes desc;
+    COUNT(sg.id) as total_sessoes,
+    COUNT(DISTINCT sg.conteudo_id) as conteudos_diferentes,
+    COUNT(DISTINCT gm.perfil_id) as total_membros
+FROM grupo g
+LEFT JOIN sessao_grupo sg ON sg.grupo_id = g.id
+LEFT JOIN grupo_membro gm ON gm.grupo_id = g.id
+GROUP BY g.id, g.nome
+ORDER BY total_sessoes DESC;

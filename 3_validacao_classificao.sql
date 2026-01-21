@@ -6,7 +6,7 @@ create or replace function fc_validar_classificacao_perfil(
 returns boolean as $$
 declare
     v_idade_perfil integer;
-    v_classificacao conteudo.classificacao_indicativa%type;
+    v_classificacao classificacao_indicativa; 
     v_is_infantil boolean;
     v_min_idade integer;
 begin
