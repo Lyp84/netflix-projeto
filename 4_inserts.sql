@@ -1,281 +1,198 @@
--- CONTEUDO
-
 insert into conteudo (titulo, tipo, duracao_segundos, classificacao, data_lancamento, popularidade_geral) values
--- Filmes
 ('O Poderoso Chefão', 'filme', 10500, '16+', '1972-03-24', 9.2),
-('Parasita', 'filme', 7920, '16+', '2019-05-30', 8.6), 
-('Cidade de Deus', 'filme', 7800, '18+', '2002-08-30', 8.6), 
-('Toy Story', 'filme', 4860, 'L', '1995-11-22', 8.3), 
+('Parasita', 'filme', 7920, '16+', '2019-05-30', 8.6),
+('Cidade de Deus', 'filme', 7800, '18+', '2002-08-30', 8.6),
+('Toy Story', 'filme', 4860, 'L', '1995-11-22', 8.3),
 ('O Labirinto do Fauno', 'filme', 7140, '16+', '2006-10-20', 8.2),
-
--- Séries
-('Stranger Things', 'série', 3600, '16+', '2016-07-15', 8.7),  
-('La Casa de Papel', 'série', 3300, '18+', '2017-05-02', 8.2),  
-('The Crown', 'série', 3600, '14+', '2016-11-04', 8.6),  
-('Round 6', 'série', 4500, '18+', '2021-09-17', 8.0),  
-('Dark', 'série', 4500, '16+', '2017-12-01', 8.8), 
-
--- Documentários
-('Meu Amigo Totoro', 'documentário', 5160, 'L', '1988-04-16', 8.2), 
-('13ª Emenda', 'documentário', 6000, '14+', '2016-09-30', 8.2),  
-('Amy', 'documentário', 7680, '12+', '2015-05-16', 7.8),  
-('O Dilema das Redes', 'documentário', 5640, '12+', '2020-09-09', 7.6),  
-
--- Standups
-('Rafael Portugal: Pode Rir', 'standup', 3420, '14+', '2021-11-25', 7.5), 
-('Whindersson: Adulto?', 'standup', 4500, '14+', '2023-03-10', 7.8), 
-('Afonso Padilha: A Vida é Bela', 'standup', 3900, '16+', '2022-06-15', 7.9), 
-('Thiago Ventura: Pisa na Fulô', 'standup', 3600, '18+', '2023-08-20', 8.0),  
-('Paulo Vieira: Hora do Rush', 'standup', 3300, '16+', '2022-12-05', 7.7);  
+('Stranger Things', 'série', 3600, '16+', '2016-07-15', 8.7),
+('La Casa de Papel', 'série', 3300, '18+', '2017-05-02', 8.2),
+('The Crown', 'série', 3600, '14+', '2016-11-04', 8.6),
+('Round 6', 'série', 4500, '18+', '2021-09-17', 8.0),
+('Dark', 'série', 4500, '16+', '2017-12-01', 8.8),
+('Meu Amigo Totoro', 'documentário', 5160, 'L', '1988-04-16', 8.2),
+('13ª Emenda', 'documentário', 6000, '14+', '2016-09-30', 8.2),
+('Amy', 'documentário', 7680, '12+', '2015-05-16', 7.8),
+('O Dilema das Redes', 'documentário', 5640, '12+', '2020-09-09', 7.6),
+('Rafael Portugal: Pode Rir', 'standup', 3420, '14+', '2021-11-25', 7.5),
+('Whindersson: Adulto?', 'standup', 4500, '14+', '2023-03-10', 7.8),
+('Afonso Padilha: A Vida é Bela', 'standup', 3900, '16+', '2022-06-15', 7.9),
+('Thiago Ventura: Pisa na Fulô', 'standup', 3600, '18+', '2023-08-20', 8.0),
+('Paulo Vieira: Hora do Rush', 'standup', 3300, '16+', '2022-12-05', 7.7);
 
 insert into conteudo (titulo, tipo, duracao_segundos, classificacao, data_lancamento, popularidade_geral) values
-
 ('Clube da Luta', 'filme', 8340, '18+', '1999-10-15', 8.8),
 ('Interestelar', 'filme', 10140, '12+', '2014-10-26', 8.6),
-
 ('Breaking Bad', 'série', 2880, '18+', '2008-01-20', 9.5),
 ('Game of Thrones', 'série', 3300, '18+', '2011-04-17', 9.3),
-
 ('The Last Dance', 'documentário', 3000, '12+', '2020-04-19', 9.1);
 
-
--- USUÁRIOS 
 insert into usuario (email, plano, data_cadastro) values
 ('familia.silva@email.com', 'premium', '2023-01-15 10:30:00'),
 ('familia.oliveira@email.com', 'premium', '2023-03-20 14:15:00'),
 ('familia.santos@email.com', 'padrao', '2023-06-10 09:45:00'),
 ('familia.costa@email.com', 'padrao', '2023-08-05 16:20:00'),
 ('familia.pereira@email.com', 'básico', '2023-11-12 11:30:00'),
-
 ('joao.individual@email.com', 'básico', '2024-01-10 08:15:00'),
 ('maria.solteira@email.com', 'padrao', '2024-01-25 13:40:00'),
 ('carlos.gamer@email.com', 'premium', '2024-02-05 19:20:00'),
 ('ana.professora@email.com', 'padrao', '2024-02-18 10:10:00'),
 ('pedro.estudante@email.com', 'básico', '2024-03-01 15:30:00'),
-
 ('casal.ribeiro@email.com', 'premium', '2024-01-08 12:00:00'),
 ('casal.almeida@email.com', 'padrao', '2024-02-14 20:00:00'),
-
-
 ('amigos.faculdade@email.com', 'premium', '2023-09-15 17:25:00'),
 ('salao.empresa@email.com', 'padrao', '2023-12-01 09:00:00'),
 ('grupo.esportes@email.com', 'básico', '2024-01-20 18:45:00');
 
-
--- PERFIL
 insert into perfil (usuario_id, nome, idade, is_infantil) values
 (1, 'Carlos Silva', 42, false),
 (1, 'Ana Silva', 38, false),
 (1, 'Pedro Silva', 15, false),
-(1, 'Luiza Silva', 8, true);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
+(1, 'Luiza Silva', 8, true),
 (2, 'Roberto Oliveira', 45, false),
 (2, 'Cláudia Oliveira', 40, false),
-(2, 'Lucas Oliveira', 10, true);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
+(2, 'Lucas Oliveira', 10, true),
 (3, 'Fernando Santos', 35, false),
-(3, 'Patrícia Santos', 32, false);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
+(3, 'Patrícia Santos', 32, false),
 (4, 'Miguel Costa', 50, false),
 (4, 'Sofia Costa', 48, false),
-(4, 'Gabriel Costa', 16, false);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
-(5, 'Antônio Pereira', 65, false);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
-(6, 'João Mendes', 28, false);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
-(7, 'Maria Souza', 25, false);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
-(8, 'Carlos Lima', 22, false);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
-(9, 'Ana Rodrigues', 35, false);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
-(10, 'Pedro Alves', 19, false);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
+(4, 'Gabriel Costa', 16, false),
+(5, 'Antônio Pereira', 65, false),
+(6, 'João Mendes', 28, false),
+(7, 'Maria Souza', 25, false),
+(8, 'Carlos Lima', 22, false),
+(9, 'Ana Rodrigues', 35, false),
+(10, 'Pedro Alves', 19, false),
 (11, 'Ricardo Ribeiro', 40, false),
-(11, 'Camila Ribeiro', 38, false);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
+(11, 'Camila Ribeiro', 38, false),
 (12, 'Marcos Almeida', 30, false),
-(12, 'Juliana Almeida', 29, false);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
+(12, 'Juliana Almeida', 29, false),
 (13, 'Bruno Faculdade', 21, false),
 (13, 'Paula Faculdade', 22, false),
-(13, 'André Faculdade', 20, false);
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
+(13, 'André Faculdade', 20, false),
 (14, 'Recepção Empresa', 99, false),
-(14, 'Sala Reunião', 99, false);      
-
-insert into perfil (usuario_id, nome, idade, is_infantil) values
+(14, 'Sala Reunião', 99, false),
 (15, 'Academia Central', 99, false);
 
-
-
-
-
--- Inserir gêneros (microgêneros estilo Netflix)
 insert into genero (nome) values
 ('Drama Criminal'),
 ('Drama Familiar'),
 ('Drama Histórico'),
 ('Drama Policial'),
 ('Drama de Crime Verdadeiro'),
-
 ('Comédia Romântica'),
 ('Comédia Stand-up'),
 ('Comédia Dramática'),
 ('Comédia de Situação'),
 ('Comédia Negra'),
-
 ('Suspense Psicológico'),
 ('Thriller de Ação'),
 ('Thriller Policial'),
 ('Suspense Investigativo'),
 ('Ação e Aventura'),
-
 ('Ficção Científica'),
 ('Fantasia Sombria'),
 ('Distopia'),
 ('Ficção Científica Adolescente'),
 ('Fantasia Épica'),
-
 ('Terror Psicológico'),
 ('Terror Sobrenatural'),
 ('Slasher'),
 ('Terror de Monstros'),
-
 ('Documentário Social'),
 ('Documentário True Crime'),
 ('Documentário Biográfico'),
 ('Documentário Político'),
 ('Documentário Histórico'),
-
 ('Animação Infantil'),
 ('Animação para Adultos'),
 ('Anime'),
 ('Animação Stop Motion'),
-
 ('Cinema Coreano'),
 ('Cinema Brasileiro'),
 ('Cinema Espanhol'),
 ('Séries Europeias'),
-
 ('Romance'),
 ('Musical'),
 ('Esportes'),
 ('Reality Show'),
 ('Competição');
 
-
 insert into conteudo_genero (conteudo_id, genero_id) values
-
 (1, 1),
 (1, 3),
-
 (2, 1),
 (2, 8),
 (2, 9),
 (2, 25),
-
 (3, 1),
 (3, 4),
 (3, 26),
 (3, 5),
-
 (4, 21),
 (4, 15),
-
 (5, 16),
 (5, 3),
 (5, 27),
-
 (6, 13),
 (6, 11),
 (6, 16),
 (6, 3),
-
 (7, 4),
 (7, 12),
 (7, 1),
 (7, 27),
-
 (8, 3),
 (8, 24),
-
 (9, 14),
 (9, 12),
 (9, 9),
 (9, 25),
-
-
 (10, 13),
 (10, 11),
 (10, 3),
 (10, 28),
-
 (11, 21),
 (11, 16),
 (11, 23),
-
 (12, 20),
 (12, 22),
 (12, 24),
-
 (13, 21),
-
-
 (14, 20),
 (14, 13),
 (14, 22),
-
-
 (15, 7),
 (15, 26),
-
 (16, 7),
 (16, 26),
-
 (17, 7),
 (17, 26),
-
 (18, 7),
 (18, 26),
 (18, 20),
-
 (19, 7),
-(19, 26);
-
-insert into conteudo_genero (conteudo_id, genero_id) values
-
-(20, 1),  
-(20, 8),  
-(20, 11), 
-
-(21, 13), 
+(19, 26),
+(20, 1),
+(20, 8),
+(20, 11),
+(21, 13),
 (21, 3),
 (21, 31),
-
-(22, 1), 
-(22, 8), 
-(22, 4),  
-
-(23, 16), 
-(23, 3), 
-(23, 19), 
-
-
-(24, 21), 
-(24, 32), 
+(22, 1),
+(22, 8),
+(22, 4),
+(23, 16),
+(23, 3),
+(23, 19),
+(24, 21),
+(24, 32),
 (24, 24);
+
+
+INSERT INTO grupo (nome, usuario_id, descricao) VALUES
+('Família Silva', 1, 'Grupo familiar para assistir juntos'),
+('Amigos Faculdade', 13, 'Grupo de amigos da faculdade');
+
+INSERT INTO grupo_membro (grupo_id, perfil_id) VALUES
+(1, 1), (1, 2), (1, 3),  -- Família Silva
+(2, 23), (2, 24), (2, 25);

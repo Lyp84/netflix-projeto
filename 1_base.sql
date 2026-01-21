@@ -12,7 +12,7 @@ create table conteudo (
     duracao_segundos integer,
     classificacao classificacao_indicativa not null,
     data_lancamento date,
-    popularidade_geral popularidade_geral(3,2) default 0.00
+    popularidade_geral decimal(3,2) default 0.00
 );
 
 -- Genero conteudo
@@ -52,10 +52,7 @@ create table acao_usuario (
     conteudo_id integer not null references conteudo(id) on delete cascade,
     acao tipo_acao not null,  
     porcentagem decimal(5,2) check (porcentagem between 0 and 100),
-    data_hora timestamp default current_timestamp,
-    -- índice
-    index idx_acao_usuario_perfil (perfil_id),
-    index idx_acao_usuario_conteudo (conteudo_id)
+    data_hora timestamp default current_timestamp
 );
 
 

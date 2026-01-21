@@ -1,24 +1,20 @@
--- FUNÇÃO FORMATAÇÃO MINUTOS
-create or replace function fc_formatar_duracao_com_segundos_filmes(duracao_segundos integer)
-returns varchar(20) as $$
-declare 
-    horas int;
-    minutos int;
-    segundos int;
+-- função auxiliar para formatação de duração
+create or replace function fc_formatar_duracao(duracao_segundos integer)
+returns text as $$
 begin
-    horas := floor(duracao_segundos / 3600);
-    minutos := floor((duracao_segundos % 3600) / 60);
-    segundos := duracao_segundos % 60;
+    if duracao_segundos is null then
+        return '--:--';
+    end if;
     
-    -- formatação
-    return concat(
-        lpad(horas::text, 2, '0'), ':',
-        lpad(minutos::text, 2, '0'), ':',
-        lpad(segundos::text, 2, '0')
-    );
+    if duracao_segundos < 3600 then
+        return floor(duracao_segundos / 60) || 'min';
+    else
+        return floor(duracao_segundos / 3600) || 'h ' || 
+               lpad(floor((duracao_segundos % 3600) / 60)::text, 2, '0') || 'min';
+    end if;
 end;
 $$ language plpgsql;
-select formatar_duracao_com_segundos_filmes(select duracao_segundos from filmes)
+
 
 create or replace function fc_assistir_conteudo(
     p_perfil_id integer,
@@ -196,7 +192,20 @@ execute function fc_processar_acao_usuario();
 --Atualizar preferências automaticamente
 create or replace function fc_atualizar_preferencias_perfil(p_perfil_id integer)
 returns void as $$
+declare
+    v_total_assistidos integer;
 begin
+    -- Primeiro calcula o total
+    select count(*) into v_total_assistidos
+    from historico 
+    where perfil_id = p_perfil_id 
+    and porcentagem_assistida > 50;
+    
+    -- Depois verifica
+    IF v_total_assistidos = 0 THEN
+        RETURN;
+    END IF;
+    
     -- limpa preferências antigas
     delete from preferencia_perfil where perfil_id = p_perfil_id;
     
@@ -205,7 +214,7 @@ begin
     select 
         h.perfil_id,
         cg.genero_id,
-        (count(*) * 1.0 / total.total_assistidos) 
+        (count(*) * 1.0 / v_total_assistidos) 
         * coalesce(avg(h.avaliacao/5.0), 0.5)
         * case 
             when max(h.data_hora_fim) > current_timestamp - interval '30 days' 
@@ -213,15 +222,9 @@ begin
           end as score_final
     from historico h
     join conteudo_genero cg on cg.conteudo_id = h.conteudo_id
-    cross join (
-        select count(*) as total_assistidos 
-        from historico 
-        where perfil_id = p_perfil_id 
-        and porcentagem_assistida > 50
-    ) as total
     where h.perfil_id = p_perfil_id
     and h.porcentagem_assistida > 50
-    group by h.perfil_id, cg.genero_id, total.total_assistidos;
+    group by h.perfil_id, cg.genero_id;
 end;
 $$ language plpgsql;
 
